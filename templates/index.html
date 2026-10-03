@@ -22,7 +22,8 @@ a{color:inherit}
 /* header */
 header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--slate-200)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:10px 0}
-.brand{text-decoration:none;font-weight:700;font-size:1.1rem;color:var(--teal-900)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:700;font-size:1.1rem;color:var(--teal-900)}
+.brand svg{width:28px;height:28px;flex:none}
 .nav-links{display:none}
 .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:none;cursor:pointer;font-weight:600;border-radius:10px;padding:13px 24px;font-size:1rem;min-height:48px;transition:background .15s ease}
 .btn-primary{background:var(--teal-700);color:#fff}
@@ -161,7 +162,10 @@ footer b{color:#fff}
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="#beranda">HDPredictor</a>
+    <a class="brand" href="#beranda">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      HDPredictor
+    </a>
     <ul class="nav-links">
       <li><a href="#cara">Cara Pakai</a></li>
       <li><a href="#data">Data</a></li>
