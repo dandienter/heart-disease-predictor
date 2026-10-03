@@ -3,13 +3,13 @@
 Aplikasi prediksi risiko penyakit jantung — **Mini Project End-to-End (Bab 14)**
 dari praktikum Machine Learning.
 
-🌐 **Web live:** https://heart-disease-predictor-dandie-46126b49.koyeb.app Model dilatih di
+🌐 **Web live:** https://hdpredictor.koyeb.app Model dilatih di
 [`praktikumML/bab-14-mini-project-end-to-end`](https://github.com/dandienter/praktikumML/tree/main/bab-14-mini-project-end-to-end)
 mengikuti seluruh fase CRISP-DM, lalu di-deploy dalam **dua antarmuka**:
 
 | Antarmuka | File | Cara akses |
 |---|---|---|
-| 🌐 Web app | `app.py` (Flask) | Browser — **live:** https://heart-disease-predictor-dandie-46126b49.koyeb.app |
+| 🌐 Web app | `app.py` (Flask) | Browser — **live:** https://hdpredictor.koyeb.app |
 | 🤖 Bot Telegram | `bot.py` | Chat Telegram |
 
 Keduanya memakai **model yang sama** (`model_heart.pkl`), jadi hasilnya konsisten.
@@ -56,7 +56,7 @@ pip install -r requirements.txt
 
 ### 2a. Web app (Streamlit)
 
-Buka https://heart-disease-predictor-dandie-46126b49.koyeb.app di browser
+Buka https://hdpredictor.koyeb.app di browser
 (atau jalankan lokal: `python app.py` → `http://localhost:8501`).
 Isi 13 data klinis di form, klik **🔍 Prediksi Sekarang** → hasil muncul:
 
