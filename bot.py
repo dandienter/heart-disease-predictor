@@ -1,7 +1,7 @@
 """Bot Telegram: Prediksi Penyakit Jantung.
 
-Bot menanyakan 13 fitur klinis satu per satu lewat chat, lalu menjawab
-hasil prediksi dari model yang sama dengan aplikasi web.
+Semua pertanyaan dijawab cukup dengan menekan tombol (inline keyboard)
+— pengguna tidak perlu mengetik angka sama sekali.
 
 Menjalankan:
     export TELEGRAM_BOT_TOKEN="<token dari @BotFather>"
@@ -12,9 +12,9 @@ import os
 
 import joblib
 import pandas as pd
-from telegram import Update
-from telegram.ext import (Application, CommandHandler, ContextTypes,
-                          ConversationHandler, MessageHandler, filters)
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
+                          ContextTypes, ConversationHandler)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -30,57 +30,96 @@ def add_features(d: pd.DataFrame) -> pd.DataFrame:
     return d
 
 
-# (key, pertanyaan, parser) — parser mengubah teks user jadi angka
-PERTANYAAN = [
-    ("age", "[1/13] Umur pasien (tahun)?\nContoh: 55", float),
-    ("sex", "[2/13] Jenis kelamin? (1 = laki-laki, 0 = perempuan)", float),
-    ("cp", "[3/13] Jenis nyeri dada? (1=typical angina, 2=atypical angina, 3=non-anginal, 4=asymptomatic)", float),
-    ("trestbps", "[4/13] Tekanan darah istirahat (mm Hg)?\nContoh: 130", float),
-    ("chol", "[5/13] Kolesterol (mg/dl)?\nContoh: 250", float),
-    ("fbs", "[6/13] Gula darah puasa > 120 mg/dl? (1 = ya, 0 = tidak)", float),
-    ("restecg", "[7/13] Hasil EKG istirahat? (0=normal, 1=ST-T abnormal, 2=hipertrofi ventrikel)", float),
-    ("thalach", "[8/13] Detak jantung maksimum yang tercapai?\nContoh: 150", float),
-    ("exang", "[9/13] Angina saat olahraga? (1 = ya, 0 = tidak)", float),
-    ("oldpeak", "[10/13] ST depression (oldpeak)?\nContoh: 1.4", float),
-    ("slope", "[11/13] Kemiringan segmen ST? (1=upsloping, 2=flat, 3=downsloping)", float),
-    ("ca", "[12/13] Jumlah pembuluh utama terlihat (fluoroskopi)? (0-3)", float),
-    ("thal", "[13/13] Thalassemia? (3=normal, 6=fixed defect, 7=reversible defect)", float),
+# (key, teks pertanyaan, [(label tombol, nilai), ...])
+SOAL = [
+    ("age", "Umur pasien (tahun)?",
+     [("30", 30), ("40", 40), ("50", 50), ("55", 55), ("60", 60), ("65", 65), ("70", 70)]),
+    ("sex", "Jenis kelamin?",
+     [("Laki-laki", 1), ("Perempuan", 0)]),
+    ("cp", "Jenis nyeri dada?",
+     [("Tipikal", 1), ("Atipikal", 2), ("Non-angina", 3), ("Asimtomatik", 4)]),
+    ("trestbps", "Tekanan darah istirahat (mmHg)?",
+     [("110", 110), ("120", 120), ("130", 130), ("140", 140), ("150", 150), ("160", 160)]),
+    ("chol", "Kolesterol (mg/dl)?",
+     [("180", 180), ("200", 200), ("220", 220), ("250", 250), ("280", 280), ("300", 300)]),
+    ("fbs", "Gula darah puasa > 120 mg/dl?",
+     [("Ya", 1), ("Tidak", 0)]),
+    ("restecg", "Hasil EKG istirahat?",
+     [("Normal", 0), ("ST-T abnormal", 1), ("Hipertrofi ventrikel", 2)]),
+    ("thalach", "Detak jantung maksimum yang tercapai?",
+     [("120", 120), ("140", 140), ("150", 150), ("160", 160), ("180", 180)]),
+    ("exang", "Nyeri dada saat olahraga?",
+     [("Ya", 1), ("Tidak", 0)]),
+    ("oldpeak", "Depresi segmen ST (oldpeak)?",
+     [("0", 0), ("0,5", 0.5), ("1,0", 1.0), ("1,5", 1.5), ("2,0", 2.0), ("3,0", 3.0)]),
+    ("slope", "Kemiringan segmen ST?",
+     [("Menanjak", 1), ("Datar", 2), ("Menurun", 3)]),
+    ("ca", "Jumlah pembuluh utama terlihat (fluoroskopi)?",
+     [("0", 0), ("1", 1), ("2", 2), ("3", 3)]),
+    ("thal", "Thalassemia?",
+     [("Normal", 3), ("Cacat tetap", 6), ("Cacat reversibel", 7)]),
 ]
 
 TANYA = 0
 
 
+def keyboard_soal(idx: int) -> InlineKeyboardMarkup:
+    _, _, opsi = SOAL[idx]
+    baris, tmp = [], []
+    for label, nilai in opsi:
+        tmp.append(InlineKeyboardButton(label, callback_data=f"soal:{idx}:{nilai}"))
+        if len(tmp) == 3:
+            baris.append(tmp)
+            tmp = []
+    if tmp:
+        baris.append(tmp)
+    return InlineKeyboardMarkup(baris)
+
+
+def teks_soal(idx: int) -> str:
+    _, tanya, _ = SOAL[idx]
+    return f"[{idx + 1}/{len(SOAL)}] {tanya}"
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.user_data.clear()
+    context.user_data["idx"] = 0
     await update.message.reply_text(
         "*Prediksi Risiko Penyakit Jantung*\n\n"
-        "Saya akan menanyakan 13 data klinis, lalu memprediksi tingkat risikonya "
-        "dengan model Machine Learning.\n\n"
+        "Jawab 13 pertanyaan berikut cukup dengan menekan tombol. "
+        "Hasil prediksi dihitung dengan model Machine Learning.\n\n"
         "Ketik /batal kapan saja untuk berhenti.",
         parse_mode="Markdown",
     )
-    context.user_data["idx"] = 0
-    await update.message.reply_text(PERTANYAAN[0][1])
+    await update.message.reply_text(teks_soal(0), reply_markup=keyboard_soal(0))
     return TANYA
 
 
-async def terima(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    idx = context.user_data["idx"]
-    key, _, parser = PERTANYAAN[idx]
+async def jawab(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
     try:
-        context.user_data[key] = parser(update.message.text.strip().replace(",", "."))
-    except ValueError:
-        await update.message.reply_text("Masukkan angka yang valid ya. Coba lagi:")
+        _, idx_s, nilai_s = query.data.split(":")
+        idx = int(idx_s)
+        nilai = float(nilai_s)
+    except (ValueError, AttributeError):
         return TANYA
 
+    # abaikan tombol dari soal yang sudah lewat
+    if idx != context.user_data.get("idx", -1):
+        return TANYA
+
+    key = SOAL[idx][0]
+    context.user_data[key] = nilai
     idx += 1
-    if idx < len(PERTANYAAN):
-        context.user_data["idx"] = idx
-        await update.message.reply_text(PERTANYAAN[idx][1])
+    context.user_data["idx"] = idx
+
+    if idx < len(SOAL):
+        await query.edit_message_text(teks_soal(idx), reply_markup=keyboard_soal(idx))
         return TANYA
 
     # semua terjawab -> prediksi
-    row = {k: context.user_data[k] for k, _, _ in PERTANYAAN}
+    row = {k: context.user_data[k] for k, _, _ in SOAL}
     X = add_features(pd.DataFrame([row]))[FITUR]
     proba = float(model.predict_proba(X)[0][1])
     pred = int(model.predict(X)[0])
@@ -96,7 +135,7 @@ async def terima(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     hasil += ("\n\n_Ini prediksi model ML untuk edukasi, bukan diagnosis medis._\n"
               "Ketik /start untuk prediksi baru.")
-    await update.message.reply_text(hasil, parse_mode="Markdown")
+    await query.edit_message_text(hasil, parse_mode="Markdown")
     return ConversationHandler.END
 
 
@@ -114,7 +153,7 @@ def main() -> None:
     app = Application.builder().token(token).build()
     conv = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
-        states={TANYA: [MessageHandler(filters.TEXT & ~filters.COMMAND, terima)]},
+        states={TANYA: [CallbackQueryHandler(jawab, pattern=r"^soal:")]},
         fallbacks=[CommandHandler("batal", batal)],
     )
     app.add_handler(conv)

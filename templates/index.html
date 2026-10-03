@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KardioCek — Prediksi Risiko Penyakit Jantung</title>
+<title>HDPredictor — Prediksi Risiko Penyakit Jantung</title>
 <meta name="description" content="Aplikasi prediksi risiko penyakit jantung berbasis Machine Learning. Proyek Tugas Akhir oleh Ahmad Dandi Subhani, Universitas Indraprasta PGRI.">
 <style>
+/* ============ MOBILE FIRST ============ */
 :root{
   --teal-900:#134e4a; --teal-700:#0f766e; --teal-600:#0d9488; --teal-50:#f0fdfa;
   --slate-900:#0f172a; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9;
@@ -14,114 +15,133 @@
   --radius:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--slate-900);background:#fff;line-height:1.65}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--slate-900);background:#fff;line-height:1.65;font-size:16px}
 a{color:inherit}
-.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
-/* ---------- header ---------- */
-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--slate-200)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:1.15rem;color:var(--teal-900)}
-.brand svg{width:30px;height:30px}
-.nav-links{display:flex;gap:26px;list-style:none;font-size:.95rem}
-.nav-links a{text-decoration:none;color:var(--slate-600);font-weight:500}
-.nav-links a:hover{color:var(--teal-700)}
-.btn{display:inline-block;text-decoration:none;border:none;cursor:pointer;font-weight:600;border-radius:10px;padding:12px 26px;font-size:1rem;transition:transform .12s ease,box-shadow .12s ease}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--slate-200)}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:60px;padding:8px 0}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:700;font-size:1.1rem;color:var(--teal-900)}
+.brand svg{width:28px;height:28px;flex:none}
+.nav-links{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:none;cursor:pointer;font-weight:600;border-radius:10px;padding:13px 24px;font-size:1rem;min-height:48px;transition:background .15s ease}
 .btn-primary{background:var(--teal-700);color:#fff}
-.btn-primary:hover{background:var(--teal-900);box-shadow:0 8px 20px rgba(15,118,110,.25)}
+.btn-primary:hover{background:var(--teal-900)}
 .btn-outline{background:#fff;color:var(--teal-700);border:2px solid var(--teal-700)}
 .btn-outline:hover{background:var(--teal-50)}
-.btn-nav{padding:9px 20px;font-size:.92rem}
-/* ---------- hero ---------- */
-.hero{background:linear-gradient(180deg,var(--teal-50) 0%,#fff 100%);padding:72px 0 56px}
-.eyebrow{display:inline-block;background:#fff;border:1px solid var(--slate-200);color:var(--teal-700);font-weight:600;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:18px}
-.hero h1{font-size:2.6rem;line-height:1.2;letter-spacing:-.01em;color:var(--slate-900);max-width:640px}
+.btn-nav{padding:10px 18px;font-size:.92rem;min-height:44px}
+/* hero */
+.hero{background:linear-gradient(180deg,var(--teal-50) 0%,#fff 100%);padding:48px 0 40px}
+.eyebrow{display:inline-block;background:#fff;border:1px solid var(--slate-200);color:var(--teal-700);font-weight:600;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:16px}
+.hero h1{font-size:1.85rem;line-height:1.25;letter-spacing:-.01em;max-width:640px}
 .hero h1 span{color:var(--teal-700)}
-.hero p.lead{margin:18px 0 28px;font-size:1.12rem;color:var(--slate-600);max-width:620px}
-.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
-.stat{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:18px 20px}
-.stat b{display:block;font-size:1.55rem;color:var(--teal-700)}
-.stat span{font-size:.88rem;color:var(--slate-500)}
-/* ---------- sections ---------- */
-section{padding:64px 0}
+.hero p.lead{margin:16px 0 24px;font-size:1.02rem;color:var(--slate-600);max-width:620px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta .btn{flex:1 1 200px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:36px}
+.stat{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:16px}
+.stat b{display:block;font-size:1.4rem;color:var(--teal-700)}
+.stat span{font-size:.84rem;color:var(--slate-500)}
+/* sections */
+section{padding:48px 0}
 section.alt{background:var(--slate-100)}
-.sec-head{max-width:680px;margin-bottom:36px}
-.sec-head h2{font-size:1.9rem;letter-spacing:-.01em;margin-bottom:10px}
-.sec-head p{color:var(--slate-600)}
-.kicker{color:var(--teal-700);font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.step{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:24px 20px}
-.step .num{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--teal-700);color:#fff;font-weight:700;margin-bottom:14px}
-.step h3{font-size:1.05rem;margin-bottom:8px}
-.step p{font-size:.93rem;color:var(--slate-600)}
-/* notice */
-.notice{border-radius:var(--radius);padding:20px 24px;font-size:.96rem;margin:0 0 8px}
+.sec-head{max-width:680px;margin-bottom:28px}
+.sec-head h2{font-size:1.55rem;letter-spacing:-.01em;margin-bottom:8px}
+.sec-head p{color:var(--slate-600);font-size:.98rem}
+.kicker{color:var(--teal-700);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.steps{display:grid;grid-template-columns:1fr;gap:12px}
+.step{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:20px}
+.step .num{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--teal-700);color:#fff;font-weight:700;margin-bottom:12px}
+.step h3{font-size:1.02rem;margin-bottom:6px}
+.step p{font-size:.92rem;color:var(--slate-600)}
+.notice{border-radius:var(--radius);padding:18px 20px;font-size:.93rem}
 .notice.warn{background:var(--amber-50);border:1px solid #fcd34d;color:#92400e}
 .notice b{display:block;margin-bottom:4px;color:var(--amber-700)}
 /* tables */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--slate-200);border-radius:var(--radius);background:#fff}
-table{width:100%;border-collapse:collapse;font-size:.93rem}
-th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--slate-200)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--slate-200);border-radius:var(--radius);background:#fff}
+table{width:100%;border-collapse:collapse;font-size:.87rem;min-width:560px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--slate-200)}
 th{background:var(--teal-900);color:#fff;font-weight:600;white-space:nowrap}
 tr:last-child td{border-bottom:none}
 tbody tr:nth-child(even){background:#f8fafc}
-.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:26px 0}
-.metric{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:18px;text-align:center}
-.metric b{display:block;font-size:1.7rem;color:var(--teal-700)}
-.metric span{font-size:.85rem;color:var(--slate-500)}
-/* ---------- form ---------- */
-.form-card{background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:34px;box-shadow:0 12px 34px rgba(15,23,42,.07)}
-.fgroup{margin-bottom:30px}
-.fgroup>h3{font-size:1.12rem;margin-bottom:4px;color:var(--teal-900)}
-.fgroup>p{font-size:.9rem;color:var(--slate-500);margin-bottom:16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:22px 0}
+.metric{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 8px;text-align:center}
+.metric b{display:block;font-size:1.35rem;color:var(--teal-700)}
+.metric span{font-size:.78rem;color:var(--slate-500)}
+/* form */
+.form-card{background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.07)}
+.fgroup{margin-bottom:26px}
+.fgroup>h3{font-size:1.08rem;margin-bottom:4px;color:var(--teal-900)}
+.fgroup>p{font-size:.88rem;color:var(--slate-500);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
 .field{display:flex;flex-direction:column;gap:6px}
-.field.full{grid-column:1/-1}
 .field label{font-weight:600;font-size:.93rem}
-.field small{color:var(--slate-500);font-size:.82rem}
-.field input,.field select{border:1.5px solid var(--slate-200);border-radius:10px;padding:11px 13px;font-size:.98rem;font-family:inherit;background:#fff;color:var(--slate-900)}
+.field small{color:var(--slate-500);font-size:.8rem}
+.field input,.field select{border:1.5px solid var(--slate-200);border-radius:10px;padding:12px;font-size:1rem;min-height:48px;font-family:inherit;background:#fff;color:var(--slate-900);width:100%}
 .field input:focus,.field select:focus{outline:none;border-color:var(--teal-600);box-shadow:0 0 0 3px rgba(13,148,136,.15)}
-.form-actions{margin-top:8px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.hint{font-size:.88rem;color:var(--slate-500)}
+.form-actions{margin-top:6px;display:flex;flex-direction:column;gap:12px}
+.form-actions .btn{width:100%}
+.hint{font-size:.86rem;color:var(--slate-500);text-align:center}
 /* result */
-#hasil{display:none;margin-top:28px;border-radius:18px;padding:30px;border:1.5px solid var(--slate-200)}
-#hasil.show{display:block;animation:fade .4s ease}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#hasil{display:none;margin-top:24px;border-radius:18px;padding:24px;border:1.5px solid var(--slate-200)}
+#hasil.show{display:block}
 #hasil.tinggi{background:var(--rose-50);border-color:#fecdd3}
 #hasil.rendah{background:var(--green-50);border-color:#bbf7d0}
-#hasil h3{font-size:1.35rem;margin-bottom:6px}
+#hasil h3{font-size:1.25rem;margin-bottom:6px}
 #hasil.tinggi h3{color:var(--rose-600)}
 #hasil.rendah h3{color:var(--green-700)}
-.prob-row{display:flex;align-items:center;gap:14px;margin:16px 0 8px}
+.prob-row{display:flex;align-items:center;gap:12px;margin:14px 0 8px}
 .prob-track{flex:1;height:14px;background:#e2e8f0;border-radius:999px;overflow:hidden}
 .prob-fill{height:100%;width:0;border-radius:999px;transition:width 1s ease}
 #hasil.tinggi .prob-fill{background:linear-gradient(90deg,#fb7185,#e11d48)}
 #hasil.rendah .prob-fill{background:linear-gradient(90deg,#4ade80,#15803d)}
-.prob-num{font-weight:700;font-size:1.15rem;min-width:64px;text-align:right}
-#hasil .interp{font-size:.95rem;color:var(--slate-600)}
-.err{background:var(--rose-50);border:1px solid #fecdd3;color:#9f1239;border-radius:10px;padding:12px 16px;margin-top:16px;display:none}
+.prob-num{font-weight:700;font-size:1.1rem;min-width:60px;text-align:right}
+#hasil .interp{font-size:.93rem;color:var(--slate-600)}
+.err{background:var(--rose-50);border:1px solid #fecdd3;color:#9f1239;border-radius:10px;padding:12px 16px;margin-top:16px;display:none;font-size:.93rem}
 /* creator */
-.creator-card{display:flex;gap:26px;align-items:center;background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:30px}
-.avatar{flex:0 0 84px;width:84px;height:84px;border-radius:50%;background:var(--teal-700);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700}
-.creator-card h3{font-size:1.3rem}
+.creator-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:28px 22px}
+.creator-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid var(--teal-50);box-shadow:0 6px 18px rgba(15,23,42,.12);flex:none}
+.creator-card h3{font-size:1.25rem}
 .creator-card .npm{color:var(--teal-700);font-weight:600}
-.creator-card p{color:var(--slate-600);font-size:.96rem;margin-top:6px}
+.creator-card p{color:var(--slate-600);font-size:.94rem;margin-top:6px;max-width:560px}
 /* footer */
-footer{background:var(--teal-900);color:#cbd5e1;padding:36px 0;font-size:.9rem}
-footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer{background:var(--teal-900);color:#cbd5e1;padding:32px 0;font-size:.88rem}
+footer .wrap{display:flex;flex-direction:column;gap:16px}
 footer b{color:#fff}
-/* responsive */
-@media(max-width:860px){
-  .stats{grid-template-columns:1fr 1fr}
-  .steps{grid-template-columns:1fr 1fr}
-  .metrics{grid-template-columns:1fr 1fr 1fr}
-  .grid{grid-template-columns:1fr}
-  .hero h1{font-size:2rem}
-  .nav-links{display:none}
-  .form-card{padding:22px}
-  .creator-card{flex-direction:column;text-align:center}
+/* ============ DESKTOP (min-width: 860px) ============ */
+@media(min-width:860px){
+  .wrap{padding:0 22px}
+  .nav-links{display:flex;gap:26px;list-style:none;font-size:.95rem}
+  .nav-links a{text-decoration:none;color:var(--slate-600);font-weight:500}
+  .nav-links a:hover{color:var(--teal-700)}
+  .hero{padding:72px 0 56px}
+  .hero h1{font-size:2.6rem}
+  .hero p.lead{font-size:1.12rem}
+  .hero-cta .btn{flex:none}
+  .stats{grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+  .stat{padding:18px 20px}
+  .stat b{font-size:1.55rem}
+  section{padding:64px 0}
+  .sec-head{margin-bottom:36px}
+  .sec-head h2{font-size:1.9rem}
+  .steps{grid-template-columns:repeat(4,1fr);gap:16px}
+  .step{padding:24px 20px}
+  .metrics{grid-template-columns:repeat(5,1fr);gap:14px;margin:26px 0}
+  .metric{padding:18px}
+  .metric b{font-size:1.7rem}
+  .metric span{font-size:.85rem}
+  table{font-size:.93rem;min-width:0}
+  .form-card{padding:34px}
+  .grid{grid-template-columns:1fr 1fr;gap:16px}
+  .field.full{grid-column:1/-1}
+  .form-actions{flex-direction:row;align-items:center}
+  .form-actions .btn{width:auto}
+  .hint{text-align:left}
+  #hasil{padding:30px}
+  .creator-card{flex-direction:row;text-align:left;padding:30px}
+  .creator-photo{width:132px;height:132px}
+  footer .wrap{flex-direction:row;justify-content:space-between;align-items:flex-start}
 }
 </style>
 </head>
@@ -131,7 +151,7 @@ footer b{color:#fff}
   <div class="wrap nav">
     <a class="brand" href="#beranda">
       <svg viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-      KardioCek
+      HDPredictor
     </a>
     <ul class="nav-links">
       <li><a href="#cara">Cara Pakai</a></li>
@@ -165,7 +185,7 @@ footer b{color:#fff}
 <section id="cara">
   <div class="wrap">
     <div class="notice warn"><b>Penting untuk dipahami</b>Hasil prediksi pada aplikasi ini hanya bersifat edukasi dan bukan diagnosis medis. Untuk kepastian kondisi kesehatan Anda, konsultasikan langsung dengan dokter atau tenaga medis profesional.</div>
-    <div style="height:34px"></div>
+    <div style="height:28px"></div>
     <div class="sec-head">
       <div class="kicker">Panduan</div>
       <h2>Cara Menggunakan Aplikasi</h2>
@@ -303,7 +323,7 @@ footer b{color:#fff}
       <h2>Kreator</h2>
     </div>
     <div class="creator-card">
-      <div class="avatar">AS</div>
+      <img class="creator-photo" src="/static/foto.jpg" alt="Foto Ahmad Dandi Subhani">
       <div>
         <h3>Ahmad Dandi Subhani</h3>
         <div class="npm">NPM 202343500126</div>
@@ -315,7 +335,7 @@ footer b{color:#fff}
 
 <footer>
   <div class="wrap">
-    <div><b>KardioCek</b> &mdash; Prediksi Risiko Penyakit Jantung.<br>Hasil bersifat edukasi, bukan diagnosis medis.</div>
+    <div><b>HDPredictor</b> &mdash; Prediksi Risiko Penyakit Jantung.<br>Hasil bersifat edukasi, bukan diagnosis medis.</div>
     <div>Dikembangkan oleh <b>Ahmad Dandi Subhani</b> (202343500126)<br>Universitas Indraprasta PGRI &mdash; 2026</div>
   </div>
 </footer>
