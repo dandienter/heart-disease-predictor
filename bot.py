@@ -1,7 +1,8 @@
 """Bot Telegram: Prediksi Penyakit Jantung.
 
-Semua pertanyaan dijawab cukup dengan menekan tombol (inline keyboard)
-— pengguna tidak perlu mengetik angka sama sekali.
+Semua pertanyaan dijawab cukup dengan menekan tombol (inline keyboard).
+Untuk angka seperti umur, pengguna juga bisa mengetik nilai sendiri
+jika tidak ada di tombol.
 
 Menjalankan:
     export TELEGRAM_BOT_TOKEN="<token dari @BotFather>"
@@ -14,7 +15,8 @@ import joblib
 import pandas as pd
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
-                          ContextTypes, ConversationHandler)
+                          ContextTypes, ConversationHandler, MessageHandler,
+                          filters)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -32,25 +34,25 @@ def add_features(d: pd.DataFrame) -> pd.DataFrame:
 
 # (key, teks pertanyaan, [(label tombol, nilai), ...])
 SOAL = [
-    ("age", "Umur pasien (tahun)?",
+    ("age", "Umur pasien (tahun)?\nPilih tombol atau ketik angka sendiri.",
      [("30", 30), ("40", 40), ("50", 50), ("55", 55), ("60", 60), ("65", 65), ("70", 70)]),
     ("sex", "Jenis kelamin?",
      [("Laki-laki", 1), ("Perempuan", 0)]),
     ("cp", "Jenis nyeri dada?",
      [("Tipikal", 1), ("Atipikal", 2), ("Non-angina", 3), ("Asimtomatik", 4)]),
-    ("trestbps", "Tekanan darah istirahat (mmHg)?",
+    ("trestbps", "Tekanan darah istirahat (mmHg)?\nPilih tombol atau ketik angka sendiri.",
      [("110", 110), ("120", 120), ("130", 130), ("140", 140), ("150", 150), ("160", 160)]),
-    ("chol", "Kolesterol (mg/dl)?",
+    ("chol", "Kolesterol (mg/dl)?\nPilih tombol atau ketik angka sendiri.",
      [("180", 180), ("200", 200), ("220", 220), ("250", 250), ("280", 280), ("300", 300)]),
     ("fbs", "Gula darah puasa > 120 mg/dl?",
      [("Ya", 1), ("Tidak", 0)]),
     ("restecg", "Hasil EKG istirahat?",
      [("Normal", 0), ("ST-T abnormal", 1), ("Hipertrofi ventrikel", 2)]),
-    ("thalach", "Detak jantung maksimum yang tercapai?",
+    ("thalach", "Detak jantung maksimum yang tercapai?\nPilih tombol atau ketik angka sendiri.",
      [("120", 120), ("140", 140), ("150", 150), ("160", 160), ("180", 180)]),
     ("exang", "Nyeri dada saat olahraga?",
      [("Ya", 1), ("Tidak", 0)]),
-    ("oldpeak", "Depresi segmen ST (oldpeak)?",
+    ("oldpeak", "Depresi segmen ST (oldpeak)?\nPilih tombol atau ketik angka sendiri (contoh: 1,4).",
      [("0", 0), ("0,5", 0.5), ("1,0", 1.0), ("1,5", 1.5), ("2,0", 2.0), ("3,0", 3.0)]),
     ("slope", "Kemiringan segmen ST?",
      [("Menanjak", 1), ("Datar", 2), ("Menurun", 3)]),
@@ -61,6 +63,16 @@ SOAL = [
 ]
 
 TANYA = 0
+
+# soal numerik boleh juga dijawab dengan mengetik angka sendiri
+NUMERIK = {"age", "trestbps", "chol", "thalach", "oldpeak"}
+BATAS = {
+    "age": (1, 120),
+    "trestbps": (80, 250),
+    "chol": (100, 600),
+    "thalach": (60, 250),
+    "oldpeak": (0, 10),
+}
 
 
 def keyboard_soal(idx: int) -> InlineKeyboardMarkup:
@@ -95,6 +107,26 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return TANYA
 
 
+def teks_hasil(user_data: dict) -> str:
+    row = {k: user_data[k] for k, _, _ in SOAL}
+    X = add_features(pd.DataFrame([row]))[FITUR]
+    proba = float(model.predict_proba(X)[0][1])
+    pred = int(model.predict(X)[0])
+
+    if pred == 1:
+        hasil = (f"*Risiko TINGGI penyakit jantung*\n"
+                 f"Probabilitas: {proba:.1%}\n\n"
+                 "Disarankan konsultasi ke dokter untuk pemeriksaan lanjutan.")
+    else:
+        hasil = (f"*Risiko RENDAH penyakit jantung*\n"
+                 f"Probabilitas: {proba:.1%}\n\n"
+                 "Tetap jaga pola hidup sehat dan cek kesehatan berkala.")
+
+    hasil += ("\n\n_Ini prediksi model ML untuk edukasi, bukan diagnosis medis._\n"
+              "Ketik /start untuk prediksi baru.")
+    return hasil
+
+
 async def jawab(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     await query.answer()
@@ -118,24 +150,43 @@ async def jawab(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         await query.edit_message_text(teks_soal(idx), reply_markup=keyboard_soal(idx))
         return TANYA
 
-    # semua terjawab -> prediksi
-    row = {k: context.user_data[k] for k, _, _ in SOAL}
-    X = add_features(pd.DataFrame([row]))[FITUR]
-    proba = float(model.predict_proba(X)[0][1])
-    pred = int(model.predict(X)[0])
+    await query.edit_message_text(teks_hasil(context.user_data), parse_mode="Markdown")
+    return ConversationHandler.END
 
-    if pred == 1:
-        hasil = (f"*Risiko TINGGI penyakit jantung*\n"
-                 f"Probabilitas: {proba:.1%}\n\n"
-                 "Disarankan konsultasi ke dokter untuk pemeriksaan lanjutan.")
-    else:
-        hasil = (f"*Risiko RENDAH penyakit jantung*\n"
-                 f"Probabilitas: {proba:.1%}\n\n"
-                 "Tetap jaga pola hidup sehat dan cek kesehatan berkala.")
 
-    hasil += ("\n\n_Ini prediksi model ML untuk edukasi, bukan diagnosis medis._\n"
-              "Ketik /start untuk prediksi baru.")
-    await query.edit_message_text(hasil, parse_mode="Markdown")
+async def terima_teks(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Jawaban ketikan manual, hanya untuk soal numerik."""
+    idx = context.user_data.get("idx", -1)
+    if idx < 0 or idx >= len(SOAL):
+        return TANYA
+
+    key = SOAL[idx][0]
+    if key not in NUMERIK:
+        await update.message.reply_text(
+            "Untuk pertanyaan ini pilih salah satu tombol di atas ya.")
+        return TANYA
+
+    try:
+        nilai = float(update.message.text.strip().replace(",", "."))
+    except ValueError:
+        await update.message.reply_text("Masukkan angka yang valid, contoh: 45")
+        return TANYA
+
+    lo, hi = BATAS[key]
+    if not (lo <= nilai <= hi):
+        await update.message.reply_text(
+            f"Nilainya di luar rentang wajar ({lo}-{hi}). Coba lagi.")
+        return TANYA
+
+    context.user_data[key] = nilai
+    idx += 1
+    context.user_data["idx"] = idx
+
+    if idx < len(SOAL):
+        await update.message.reply_text(teks_soal(idx), reply_markup=keyboard_soal(idx))
+        return TANYA
+
+    await update.message.reply_text(teks_hasil(context.user_data), parse_mode="Markdown")
     return ConversationHandler.END
 
 
@@ -153,7 +204,10 @@ def main() -> None:
     app = Application.builder().token(token).build()
     conv = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
-        states={TANYA: [CallbackQueryHandler(jawab, pattern=r"^soal:")]},
+        states={TANYA: [
+            CallbackQueryHandler(jawab, pattern=r"^soal:"),
+            MessageHandler(filters.TEXT & ~filters.COMMAND, terima_teks),
+        ]},
         fallbacks=[CommandHandler("batal", batal)],
     )
     app.add_handler(conv)
