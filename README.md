@@ -1,13 +1,15 @@
 # 🫀 Heart Disease Predictor
 
 Aplikasi prediksi risiko penyakit jantung — **Mini Project End-to-End (Bab 14)**
-dari praktikum Machine Learning. Model dilatih di
+dari praktikum Machine Learning.
+
+🌐 **Web live:** https://heart-disease-predictor-dandie-46126b49.koyeb.app Model dilatih di
 [`praktikumML/bab-14-mini-project-end-to-end`](https://github.com/dandienter/praktikumML/tree/main/bab-14-mini-project-end-to-end)
 mengikuti seluruh fase CRISP-DM, lalu di-deploy dalam **dua antarmuka**:
 
 | Antarmuka | File | Cara akses |
 |---|---|---|
-| 🌐 Web app | `app.py` | Browser (Streamlit) — **live:** https://heart-disease-predictor-dandie-46126b49.koyeb.app |
+| 🌐 Web app | `app.py` (Flask) | Browser — **live:** https://heart-disease-predictor-dandie-46126b49.koyeb.app |
 | 🤖 Bot Telegram | `bot.py` | Chat Telegram |
 
 Keduanya memakai **model yang sama** (`model_heart.pkl`), jadi hasilnya konsisten.
@@ -34,7 +36,8 @@ Keduanya memakai **model yang sama** (`model_heart.pkl`), jadi hasilnya konsiste
 
 ```text
 heart-disease-predictor/
-├── app.py              # Web app Streamlit
+├── app.py              # Web app Flask (UI modern)
+├── templates/index.html   # Tampilan web
 ├── bot.py              # Bot Telegram
 ├── model_heart.pkl     # Model terlatih (pipeline scaler + SVM)
 ├── fitur_heart.pkl     # Daftar 15 nama fitur (urutan harus sama)
@@ -53,13 +56,9 @@ pip install -r requirements.txt
 
 ### 2a. Web app (Streamlit)
 
-```bash
-streamlit run app.py
-```
-
 Buka https://heart-disease-predictor-dandie-46126b49.koyeb.app di browser
-(atau `http://localhost:8501` kalau jalan lokal). Isi 13 data klinis lewat slider/dropdown,
-klik **🔍 Prediksi** → hasil muncul:
+(atau jalankan lokal: `python app.py` → `http://localhost:8501`).
+Isi 13 data klinis di form, klik **🔍 Prediksi Sekarang** → hasil muncul:
 
 - 🟢 **Risiko RENDAH** — probabilitas, misal `12,4%`
 - 🔴 **Risiko TINGGI** — probabilitas, misal `87,9%`

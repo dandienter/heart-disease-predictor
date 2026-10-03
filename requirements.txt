@@ -1,6 +1,7 @@
-streamlit>=1.32
+flask>=3.0
+gunicorn>=21.0
 scikit-learn==1.9.1
 pandas==3.0.6
 numpy==2.5.3
 joblib>=1.4
-python-telegram-bot[job-queue]>=21.0
+python-telegram-bot>=21.0
