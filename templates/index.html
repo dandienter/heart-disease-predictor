@@ -105,6 +105,14 @@ tbody tr:nth-child(even){background:#f8fafc}
 .creator-card h3{font-size:1.25rem}
 .creator-card .npm{color:var(--teal-700);font-weight:600}
 .creator-card p{color:var(--slate-600);font-size:.94rem;margin-top:6px;max-width:560px}
+/* telegram strip */
+.tg-strip{display:flex;flex-direction:column;gap:16px;background:var(--teal-900);color:#e2e8f0;border-radius:18px;padding:24px 22px;margin:0 0 8px}
+.tg-strip b{color:#fff}
+.tg-strip p{font-size:.94rem;margin-top:4px}
+.btn-light{background:#fff;color:var(--teal-900)}
+.btn-light:hover{background:var(--teal-50)}
+.creator-card .meta{font-size:.9rem;margin-top:8px}
+.creator-card .meta a{color:var(--teal-700);font-weight:600}
 /* footer */
 footer{background:var(--teal-900);color:#cbd5e1;padding:32px 0;font-size:.88rem}
 footer .wrap{display:flex;flex-direction:column;gap:16px}
@@ -141,6 +149,7 @@ footer b{color:#fff}
   #hasil{padding:30px}
   .creator-card{flex-direction:row;text-align:left;padding:30px}
   .creator-photo{width:132px;height:132px}
+  .tg-strip{flex-direction:row;align-items:center;justify-content:space-between;padding:26px 30px}
   footer .wrap{flex-direction:row;justify-content:space-between;align-items:flex-start}
 }
 </style>
@@ -184,6 +193,14 @@ footer b{color:#fff}
 
 <section id="cara">
   <div class="wrap">
+    <div class="tg-strip">
+      <div>
+        <b>Tersedia juga via Telegram</b>
+        <p>Bot <b>@hdpredictor_bot</b> - jawab 13 pertanyaan cukup dengan menekan tombol, tanpa mengetik.</p>
+      </div>
+      <a class="btn btn-light" href="https://t.me/hdpredictor_bot" target="_blank" rel="noopener">Buka Bot Telegram</a>
+    </div>
+    <div style="height:28px"></div>
     <div class="notice warn"><b>Penting untuk dipahami</b>Hasil prediksi pada aplikasi ini hanya bersifat edukasi dan bukan diagnosis medis. Untuk kepastian kondisi kesehatan Anda, konsultasikan langsung dengan dokter atau tenaga medis profesional.</div>
     <div style="height:28px"></div>
     <div class="sec-head">
@@ -328,6 +345,9 @@ footer b{color:#fff}
         <h3>Ahmad Dandi Subhani</h3>
         <div class="npm">NPM 202343500126</div>
         <p>Universitas Indraprasta PGRI - Proyek Tugas Akhir Machine Learning: prediksi penyakit jantung end-to-end (CRISP-DM), dari eksplorasi data hingga deployment web dan bot Telegram.</p>
+        <p class="meta">Dosen Pengampu: <b>Nurfidah Dwitiyanti, M.Si.</b></p>
+        <p class="meta">Repository: <a href="https://github.com/dandienter/heart-disease-predictor" target="_blank" rel="noopener">github.com/dandienter/heart-disease-predictor</a></p>
+        <p class="meta">Bot Telegram: <a href="https://t.me/hdpredictor_bot" target="_blank" rel="noopener">@hdpredictor_bot</a></p>
       </div>
     </div>
   </div>
@@ -336,7 +356,7 @@ footer b{color:#fff}
 <footer>
   <div class="wrap">
     <div><b>HDPredictor</b> - Prediksi Risiko Penyakit Jantung.<br>Hasil bersifat edukasi, bukan diagnosis medis.</div>
-    <div>Dikembangkan oleh <b>Ahmad Dandi Subhani</b> (202343500126)<br>Universitas Indraprasta PGRI - 2026</div>
+    <div>Dikembangkan oleh <b>Ahmad Dandi Subhani</b> (202343500126)<br>Universitas Indraprasta PGRI - 2026<br><a href="https://github.com/dandienter/heart-disease-predictor" target="_blank" rel="noopener" style="color:#fff">Repository GitHub</a> &middot; <a href="https://t.me/hdpredictor_bot" target="_blank" rel="noopener" style="color:#fff">@hdpredictor_bot</a></div>
   </div>
 </footer>
 
