@@ -100,11 +100,14 @@ tbody tr:nth-child(even){background:#f8fafc}
 #hasil .interp{font-size:.93rem;color:var(--slate-600)}
 .err{background:var(--rose-50);border:1px solid #fecdd3;color:#9f1239;border-radius:10px;padding:12px 16px;margin-top:16px;display:none;font-size:.93rem}
 /* creator */
-.creator-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:28px 22px}
-.creator-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid var(--teal-50);box-shadow:0 6px 18px rgba(15,23,42,.12);flex:none}
+.creator-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:36px 24px}
+.creator-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid var(--teal-50);box-shadow:0 6px 18px rgba(15,23,42,.12);flex:none;margin-bottom:16px}
 .creator-card h3{font-size:1.25rem}
-.creator-card .npm{color:var(--teal-700);font-weight:600}
-.creator-card p{color:var(--slate-600);font-size:.94rem;margin-top:6px;max-width:560px}
+.creator-card .npm{color:var(--teal-700);font-weight:600;margin-top:4px}
+.creator-card .uni{color:var(--slate-600);font-size:.95rem;margin-top:10px}
+.creator-card .dosen{color:var(--slate-500);font-size:.88rem;margin-top:4px}
+.creator-btns{display:flex;gap:12px;margin-top:22px;width:100%}
+.creator-btns .btn{flex:1;padding:12px 8px;font-size:.93rem;min-height:48px}
 /* telegram strip */
 .tg-strip{display:flex;flex-direction:column;gap:16px;background:var(--teal-900);color:#e2e8f0;border-radius:18px;padding:24px 22px;margin:0 0 8px}
 .tg-strip b{color:#fff}
@@ -147,8 +150,9 @@ footer b{color:#fff}
   .form-actions .btn{width:auto}
   .hint{text-align:left}
   #hasil{padding:30px}
-  .creator-card{flex-direction:row;text-align:left;padding:30px}
+  .creator-card{padding:40px;max-width:620px;margin:0 auto}
   .creator-photo{width:132px;height:132px}
+  .creator-btns{max-width:420px}
   .tg-strip{flex-direction:row;align-items:center;justify-content:space-between;padding:26px 30px}
   footer .wrap{flex-direction:row;justify-content:space-between;align-items:flex-start}
 }
@@ -341,13 +345,13 @@ footer b{color:#fff}
     </div>
     <div class="creator-card">
       <img class="creator-photo" src="/static/foto.jpg" alt="Foto Ahmad Dandi Subhani">
-      <div>
-        <h3>Ahmad Dandi Subhani</h3>
-        <div class="npm">NPM 202343500126</div>
-        <p>Universitas Indraprasta PGRI - Proyek Tugas Akhir Machine Learning: prediksi penyakit jantung end-to-end (CRISP-DM), dari eksplorasi data hingga deployment web dan bot Telegram.</p>
-        <p class="meta">Dosen Pengampu: <b>Nurfidah Dwitiyanti, M.Si.</b></p>
-        <p class="meta">Repository: <a href="https://github.com/dandienter/heart-disease-predictor" target="_blank" rel="noopener">github.com/dandienter/heart-disease-predictor</a></p>
-        <p class="meta">Bot Telegram: <a href="https://t.me/hdpredictor_bot" target="_blank" rel="noopener">@hdpredictor_bot</a></p>
+      <h3>Ahmad Dandi Subhani</h3>
+      <div class="npm">NPM 202343500126</div>
+      <p class="uni">Universitas Indraprasta PGRI</p>
+      <p class="dosen">Dosen Pengampu: Nurfidah Dwitiyanti, M.Si.</p>
+      <div class="creator-btns">
+        <a class="btn btn-outline" href="https://github.com/dandienter/heart-disease-predictor" target="_blank" rel="noopener">Repository</a>
+        <a class="btn btn-outline" href="https://t.me/hdpredictor_bot" target="_blank" rel="noopener">Bot Telegram</a>
       </div>
     </div>
   </div>
