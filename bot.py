@@ -34,7 +34,7 @@ def add_features(d: pd.DataFrame) -> pd.DataFrame:
 PERTANYAAN = [
     ("age", "1️⃣ Umur pasien (tahun)?\nContoh: 55", float),
     ("sex", "2️⃣ Jenis kelamin? (1 = laki-laki, 0 = perempuan)", float),
-    ("cp", "3️⃣ Jenis nyeri dada? (0=typical angina, 1=atypical angina, 2=non-anginal, 3=asymptomatic)", float),
+    ("cp", "3️⃣ Jenis nyeri dada? (1=typical angina, 2=atypical angina, 3=non-anginal, 4=asymptomatic)", float),
     ("trestbps", "4️⃣ Tekanan darah istirahat (mm Hg)?\nContoh: 130", float),
     ("chol", "5️⃣ Kolesterol (mg/dl)?\nContoh: 250", float),
     ("fbs", "6️⃣ Gula darah puasa > 120 mg/dl? (1 = ya, 0 = tidak)", float),
@@ -42,7 +42,7 @@ PERTANYAAN = [
     ("thalach", "8️⃣ Detak jantung maksimum yang tercapai?\nContoh: 150", float),
     ("exang", "9️⃣ Angina saat olahraga? (1 = ya, 0 = tidak)", float),
     ("oldpeak", "🔟 ST depression (oldpeak)?\nContoh: 1.4", float),
-    ("slope", "1️⃣1️⃣ Kemiringan segmen ST? (0=upsloping, 1=flat, 2=downsloping)", float),
+    ("slope", "1️⃣1️⃣ Kemiringan segmen ST? (1=upsloping, 2=flat, 3=downsloping)", float),
     ("ca", "1️⃣2️⃣ Jumlah pembuluh utama terlihat (fluoroskopi)? (0-3)", float),
     ("thal", "1️⃣3️⃣ Thalassemia? (3=normal, 6=fixed defect, 7=reversible defect)", float),
 ]
