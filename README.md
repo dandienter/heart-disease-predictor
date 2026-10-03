@@ -7,7 +7,7 @@ mengikuti seluruh fase CRISP-DM, lalu di-deploy dalam **dua antarmuka**:
 
 | Antarmuka | File | Cara akses |
 |---|---|---|
-| 🌐 Web app | `app.py` | Browser (Streamlit) |
+| 🌐 Web app | `app.py` | Browser (Streamlit) — **live:** https://heart-disease-predictor-dandie-46126b49.koyeb.app |
 | 🤖 Bot Telegram | `bot.py` | Chat Telegram |
 
 Keduanya memakai **model yang sama** (`model_heart.pkl`), jadi hasilnya konsisten.
@@ -57,7 +57,8 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Buka `http://localhost:8501` di browser. Isi 13 data klinis lewat slider/dropdown,
+Buka https://heart-disease-predictor-dandie-46126b49.koyeb.app di browser
+(atau `http://localhost:8501` kalau jalan lokal). Isi 13 data klinis lewat slider/dropdown,
 klik **🔍 Prediksi** → hasil muncul:
 
 - 🟢 **Risiko RENDAH** — probabilitas, misal `12,4%`
