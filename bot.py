@@ -1,7 +1,7 @@
 """Bot Telegram: Prediksi Penyakit Jantung.
 
 Bot menanyakan 13 fitur klinis satu per satu lewat chat, lalu menjawab
-hasil prediksi dari model yang sama dengan aplikasi Streamlit.
+hasil prediksi dari model yang sama dengan aplikasi web.
 
 Menjalankan:
     export TELEGRAM_BOT_TOKEN="<token dari @BotFather>"
@@ -32,19 +32,19 @@ def add_features(d: pd.DataFrame) -> pd.DataFrame:
 
 # (key, pertanyaan, parser) — parser mengubah teks user jadi angka
 PERTANYAAN = [
-    ("age", "1️⃣ Umur pasien (tahun)?\nContoh: 55", float),
-    ("sex", "2️⃣ Jenis kelamin? (1 = laki-laki, 0 = perempuan)", float),
-    ("cp", "3️⃣ Jenis nyeri dada? (1=typical angina, 2=atypical angina, 3=non-anginal, 4=asymptomatic)", float),
-    ("trestbps", "4️⃣ Tekanan darah istirahat (mm Hg)?\nContoh: 130", float),
-    ("chol", "5️⃣ Kolesterol (mg/dl)?\nContoh: 250", float),
-    ("fbs", "6️⃣ Gula darah puasa > 120 mg/dl? (1 = ya, 0 = tidak)", float),
-    ("restecg", "7️⃣ Hasil EKG istirahat? (0=normal, 1=ST-T abnormal, 2=hipertrofi ventrikel)", float),
-    ("thalach", "8️⃣ Detak jantung maksimum yang tercapai?\nContoh: 150", float),
-    ("exang", "9️⃣ Angina saat olahraga? (1 = ya, 0 = tidak)", float),
-    ("oldpeak", "🔟 ST depression (oldpeak)?\nContoh: 1.4", float),
-    ("slope", "1️⃣1️⃣ Kemiringan segmen ST? (1=upsloping, 2=flat, 3=downsloping)", float),
-    ("ca", "1️⃣2️⃣ Jumlah pembuluh utama terlihat (fluoroskopi)? (0-3)", float),
-    ("thal", "1️⃣3️⃣ Thalassemia? (3=normal, 6=fixed defect, 7=reversible defect)", float),
+    ("age", "[1/13] Umur pasien (tahun)?\nContoh: 55", float),
+    ("sex", "[2/13] Jenis kelamin? (1 = laki-laki, 0 = perempuan)", float),
+    ("cp", "[3/13] Jenis nyeri dada? (1=typical angina, 2=atypical angina, 3=non-anginal, 4=asymptomatic)", float),
+    ("trestbps", "[4/13] Tekanan darah istirahat (mm Hg)?\nContoh: 130", float),
+    ("chol", "[5/13] Kolesterol (mg/dl)?\nContoh: 250", float),
+    ("fbs", "[6/13] Gula darah puasa > 120 mg/dl? (1 = ya, 0 = tidak)", float),
+    ("restecg", "[7/13] Hasil EKG istirahat? (0=normal, 1=ST-T abnormal, 2=hipertrofi ventrikel)", float),
+    ("thalach", "[8/13] Detak jantung maksimum yang tercapai?\nContoh: 150", float),
+    ("exang", "[9/13] Angina saat olahraga? (1 = ya, 0 = tidak)", float),
+    ("oldpeak", "[10/13] ST depression (oldpeak)?\nContoh: 1.4", float),
+    ("slope", "[11/13] Kemiringan segmen ST? (1=upsloping, 2=flat, 3=downsloping)", float),
+    ("ca", "[12/13] Jumlah pembuluh utama terlihat (fluoroskopi)? (0-3)", float),
+    ("thal", "[13/13] Thalassemia? (3=normal, 6=fixed defect, 7=reversible defect)", float),
 ]
 
 TANYA = 0
@@ -53,7 +53,7 @@ TANYA = 0
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.user_data.clear()
     await update.message.reply_text(
-        "🫀 *Prediksi Risiko Penyakit Jantung*\n\n"
+        "*Prediksi Risiko Penyakit Jantung*\n\n"
         "Saya akan menanyakan 13 data klinis, lalu memprediksi tingkat risikonya "
         "dengan model Machine Learning.\n\n"
         "Ketik /batal kapan saja untuk berhenti.",
@@ -70,7 +70,7 @@ async def terima(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     try:
         context.user_data[key] = parser(update.message.text.strip().replace(",", "."))
     except ValueError:
-        await update.message.reply_text("⚠️ Masukkan angka yang valid ya. Coba lagi:")
+        await update.message.reply_text("Masukkan angka yang valid ya. Coba lagi:")
         return TANYA
 
     idx += 1
@@ -86,15 +86,15 @@ async def terima(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     pred = int(model.predict(X)[0])
 
     if pred == 1:
-        hasil = (f"🔴 *Risiko TINGGI penyakit jantung*\n"
+        hasil = (f"*Risiko TINGGI penyakit jantung*\n"
                  f"Probabilitas: {proba:.1%}\n\n"
                  "Disarankan konsultasi ke dokter untuk pemeriksaan lanjutan.")
     else:
-        hasil = (f"🟢 *Risiko RENDAH penyakit jantung*\n"
+        hasil = (f"*Risiko RENDAH penyakit jantung*\n"
                  f"Probabilitas: {proba:.1%}\n\n"
                  "Tetap jaga pola hidup sehat dan cek kesehatan berkala.")
 
-    hasil += ("\n\n⚠️ _Ini prediksi model ML untuk edukasi, bukan diagnosis medis._\n"
+    hasil += ("\n\n_Ini prediksi model ML untuk edukasi, bukan diagnosis medis._\n"
               "Ketik /start untuk prediksi baru.")
     await update.message.reply_text(hasil, parse_mode="Markdown")
     return ConversationHandler.END

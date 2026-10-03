@@ -3,217 +3,367 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🫀 Prediksi Risiko Penyakit Jantung</title>
+<title>KardioCek — Prediksi Risiko Penyakit Jantung</title>
+<meta name="description" content="Aplikasi prediksi risiko penyakit jantung berbasis Machine Learning. Proyek Tugas Akhir oleh Ahmad Dandi Subhani, Universitas Indraprasta PGRI.">
 <style>
-  :root{
-    --rose:#e11d48; --rose-dark:#be123c; --rose-soft:#fff1f2;
-    --amber-bg:#fffbeb; --amber-border:#fcd34d; --amber-text:#92400e;
-    --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc;
-  }
-  *{box-sizing:border-box; margin:0; padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
-       background:var(--bg); color:var(--ink); line-height:1.6}
-  .hero{background:linear-gradient(135deg,#881337 0%,#e11d48 60%,#fb7185 100%);
-        color:#fff; padding:3rem 1.25rem 2.5rem; text-align:center}
-  .hero h1{font-size:1.9rem; font-weight:800; letter-spacing:-.02em}
-  .hero p{opacity:.92; margin-top:.4rem; font-size:1rem}
-  .chips{display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin-top:1rem}
-  .chip{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
-        padding:.3rem .8rem; border-radius:999px; font-size:.82rem; backdrop-filter:blur(4px)}
-  .wrap{max-width:860px; margin:0 auto; padding:1.25rem}
-  .card{background:#fff; border:1px solid var(--line); border-radius:1.25rem;
-        padding:1.5rem; margin-bottom:1.25rem; box-shadow:0 1px 3px rgba(15,23,42,.06)}
-  .warn{background:var(--amber-bg); border:1px solid var(--amber-border); color:var(--amber-text);
-        border-radius:1rem; padding:.9rem 1.1rem; font-size:.9rem; margin-bottom:1.25rem}
-  .warn strong{display:block; margin-bottom:.15rem}
-  h2.sec{font-size:1.05rem; margin:1.25rem 0 .75rem; display:flex; align-items:center; gap:.5rem}
-  h2.sec:first-child{margin-top:0}
-  .grid{display:grid; grid-template-columns:1fr 1fr; gap:.9rem}
-  @media(max-width:600px){.grid{grid-template-columns:1fr}}
-  label.f{display:block}
-  label.f span.lbl{display:block; font-size:.83rem; font-weight:600; color:#334155; margin-bottom:.3rem}
-  label.f input, label.f select{width:100%; padding:.65rem .8rem; font-size:.95rem;
-    border:1.5px solid var(--line); border-radius:.75rem; background:#fff; color:var(--ink)}
-  label.f input:focus, label.f select:focus{outline:none; border-color:var(--rose);
-    box-shadow:0 0 0 3px rgba(225,29,72,.12)}
-  .hint{font-size:.75rem; color:var(--muted); margin-top:.2rem}
-  .btn{display:block; width:100%; margin-top:1.4rem; padding:.9rem; font-size:1.05rem; font-weight:700;
-       color:#fff; background:linear-gradient(135deg,var(--rose),var(--rose-dark));
-       border:none; border-radius:1rem; cursor:pointer; transition:transform .08s}
-  .btn:hover{filter:brightness(1.06)} .btn:active{transform:scale(.985)}
-  .btn:disabled{opacity:.6; cursor:wait}
-  #hasil{display:none; text-align:center; padding:2rem 1.5rem}
-  #hasil.show{display:block; animation:pop .25s ease}
-  @keyframes pop{from{transform:scale(.96); opacity:0} to{transform:scale(1); opacity:1}}
-  #hasil .emoji{font-size:3.2rem}
-  #hasil h3{font-size:1.4rem; margin:.5rem 0}
-  #hasil.tinggi h3{color:var(--rose-dark)} #hasil.rendah h3{color:#15803d}
-  .bar{height:.9rem; background:#f1f5f9; border-radius:999px; overflow:hidden; margin:1rem auto; max-width:420px}
-  .bar > div{height:100%; border-radius:999px; transition:width .8s ease;
-             background:linear-gradient(90deg,#fb7185,#e11d48)}
-  #hasil.rendah .bar > div{background:linear-gradient(90deg,#4ade80,#16a34a)}
-  .prob{font-size:2rem; font-weight:800}
-  table.met{width:100%; border-collapse:collapse; font-size:.88rem; margin-top:.5rem}
-  table.met th, table.met td{padding:.55rem .6rem; border-bottom:1px solid var(--line); text-align:center}
-  table.met th{background:#f8fafc; font-weight:700}
-  table.met td:first-child, table.met th:first-child{text-align:left}
-  footer{text-align:center; color:var(--muted); font-size:.82rem; padding:2rem 1rem 2.5rem}
-  footer a{color:var(--rose); text-decoration:none; font-weight:600}
-  .err{background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:.75rem;
-       padding:.7rem 1rem; font-size:.88rem; margin-top:1rem; display:none}
+:root{
+  --teal-900:#134e4a; --teal-700:#0f766e; --teal-600:#0d9488; --teal-50:#f0fdfa;
+  --slate-900:#0f172a; --slate-600:#475569; --slate-500:#64748b; --slate-200:#e2e8f0; --slate-100:#f1f5f9;
+  --rose-600:#e11d48; --rose-50:#fff1f2; --green-700:#15803d; --green-50:#f0fdf4;
+  --amber-50:#fffbeb; --amber-700:#b45309;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--slate-900);background:#fff;line-height:1.65}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--slate-200)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:1.15rem;color:var(--teal-900)}
+.brand svg{width:30px;height:30px}
+.nav-links{display:flex;gap:26px;list-style:none;font-size:.95rem}
+.nav-links a{text-decoration:none;color:var(--slate-600);font-weight:500}
+.nav-links a:hover{color:var(--teal-700)}
+.btn{display:inline-block;text-decoration:none;border:none;cursor:pointer;font-weight:600;border-radius:10px;padding:12px 26px;font-size:1rem;transition:transform .12s ease,box-shadow .12s ease}
+.btn-primary{background:var(--teal-700);color:#fff}
+.btn-primary:hover{background:var(--teal-900);box-shadow:0 8px 20px rgba(15,118,110,.25)}
+.btn-outline{background:#fff;color:var(--teal-700);border:2px solid var(--teal-700)}
+.btn-outline:hover{background:var(--teal-50)}
+.btn-nav{padding:9px 20px;font-size:.92rem}
+/* ---------- hero ---------- */
+.hero{background:linear-gradient(180deg,var(--teal-50) 0%,#fff 100%);padding:72px 0 56px}
+.eyebrow{display:inline-block;background:#fff;border:1px solid var(--slate-200);color:var(--teal-700);font-weight:600;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:18px}
+.hero h1{font-size:2.6rem;line-height:1.2;letter-spacing:-.01em;color:var(--slate-900);max-width:640px}
+.hero h1 span{color:var(--teal-700)}
+.hero p.lead{margin:18px 0 28px;font-size:1.12rem;color:var(--slate-600);max-width:620px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+.stat{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:18px 20px}
+.stat b{display:block;font-size:1.55rem;color:var(--teal-700)}
+.stat span{font-size:.88rem;color:var(--slate-500)}
+/* ---------- sections ---------- */
+section{padding:64px 0}
+section.alt{background:var(--slate-100)}
+.sec-head{max-width:680px;margin-bottom:36px}
+.sec-head h2{font-size:1.9rem;letter-spacing:-.01em;margin-bottom:10px}
+.sec-head p{color:var(--slate-600)}
+.kicker{color:var(--teal-700);font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.step{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:24px 20px}
+.step .num{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--teal-700);color:#fff;font-weight:700;margin-bottom:14px}
+.step h3{font-size:1.05rem;margin-bottom:8px}
+.step p{font-size:.93rem;color:var(--slate-600)}
+/* notice */
+.notice{border-radius:var(--radius);padding:20px 24px;font-size:.96rem;margin:0 0 8px}
+.notice.warn{background:var(--amber-50);border:1px solid #fcd34d;color:#92400e}
+.notice b{display:block;margin-bottom:4px;color:var(--amber-700)}
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--slate-200);border-radius:var(--radius);background:#fff}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--slate-200)}
+th{background:var(--teal-900);color:#fff;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#f8fafc}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:26px 0}
+.metric{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:18px;text-align:center}
+.metric b{display:block;font-size:1.7rem;color:var(--teal-700)}
+.metric span{font-size:.85rem;color:var(--slate-500)}
+/* ---------- form ---------- */
+.form-card{background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:34px;box-shadow:0 12px 34px rgba(15,23,42,.07)}
+.fgroup{margin-bottom:30px}
+.fgroup>h3{font-size:1.12rem;margin-bottom:4px;color:var(--teal-900)}
+.fgroup>p{font-size:.9rem;color:var(--slate-500);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-weight:600;font-size:.93rem}
+.field small{color:var(--slate-500);font-size:.82rem}
+.field input,.field select{border:1.5px solid var(--slate-200);border-radius:10px;padding:11px 13px;font-size:.98rem;font-family:inherit;background:#fff;color:var(--slate-900)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--teal-600);box-shadow:0 0 0 3px rgba(13,148,136,.15)}
+.form-actions{margin-top:8px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.hint{font-size:.88rem;color:var(--slate-500)}
+/* result */
+#hasil{display:none;margin-top:28px;border-radius:18px;padding:30px;border:1.5px solid var(--slate-200)}
+#hasil.show{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#hasil.tinggi{background:var(--rose-50);border-color:#fecdd3}
+#hasil.rendah{background:var(--green-50);border-color:#bbf7d0}
+#hasil h3{font-size:1.35rem;margin-bottom:6px}
+#hasil.tinggi h3{color:var(--rose-600)}
+#hasil.rendah h3{color:var(--green-700)}
+.prob-row{display:flex;align-items:center;gap:14px;margin:16px 0 8px}
+.prob-track{flex:1;height:14px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.prob-fill{height:100%;width:0;border-radius:999px;transition:width 1s ease}
+#hasil.tinggi .prob-fill{background:linear-gradient(90deg,#fb7185,#e11d48)}
+#hasil.rendah .prob-fill{background:linear-gradient(90deg,#4ade80,#15803d)}
+.prob-num{font-weight:700;font-size:1.15rem;min-width:64px;text-align:right}
+#hasil .interp{font-size:.95rem;color:var(--slate-600)}
+.err{background:var(--rose-50);border:1px solid #fecdd3;color:#9f1239;border-radius:10px;padding:12px 16px;margin-top:16px;display:none}
+/* creator */
+.creator-card{display:flex;gap:26px;align-items:center;background:#fff;border:1px solid var(--slate-200);border-radius:18px;padding:30px}
+.avatar{flex:0 0 84px;width:84px;height:84px;border-radius:50%;background:var(--teal-700);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700}
+.creator-card h3{font-size:1.3rem}
+.creator-card .npm{color:var(--teal-700);font-weight:600}
+.creator-card p{color:var(--slate-600);font-size:.96rem;margin-top:6px}
+/* footer */
+footer{background:var(--teal-900);color:#cbd5e1;padding:36px 0;font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer b{color:#fff}
+/* responsive */
+@media(max-width:860px){
+  .stats{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .metrics{grid-template-columns:1fr 1fr 1fr}
+  .grid{grid-template-columns:1fr}
+  .hero h1{font-size:2rem}
+  .nav-links{display:none}
+  .form-card{padding:22px}
+  .creator-card{flex-direction:column;text-align:center}
+}
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <h1>🫀 Prediksi Risiko Penyakit Jantung</h1>
-  <p>Cek risiko penyakit jantung dari 13 data klinis — cepat, gratis, berbasis Machine Learning</p>
-  <div class="chips">
-    <span class="chip">👤 Ahmad Dandi Subhani</span>
-    <span class="chip">🎓 202343500126</span>
-    <span class="chip">🏛️ Universitas Indraprasta PGRI</span>
-    <span class="chip">📚 Praktikum ML · Bab 14</span>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#beranda">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      KardioCek
+    </a>
+    <ul class="nav-links">
+      <li><a href="#cara">Cara Pakai</a></li>
+      <li><a href="#data">Data</a></li>
+      <li><a href="#model">Model</a></li>
+      <li><a href="#prediksi">Prediksi</a></li>
+      <li><a href="#kreator">Kreator</a></li>
+    </ul>
+    <a class="btn btn-primary btn-nav" href="#prediksi">Mulai Prediksi</a>
+  </div>
+</header>
+
+<div class="hero" id="beranda">
+  <div class="wrap">
+    <span class="eyebrow">Proyek Tugas Akhir &mdash; Machine Learning</span>
+    <h1>Prediksi Risiko <span>Penyakit Jantung</span> Sejak Dini</h1>
+    <p class="lead">Aplikasi web berbasis kecerdasan buatan yang memperkirakan tingkat risiko penyakit jantung berdasarkan 13 indikator klinis. Dibangun sebagai proyek tugas akhir dengan metodologi CRISP-DM.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#prediksi">Mulai Prediksi</a>
+      <a class="btn btn-outline" href="#data">Pelajari Datanya</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>86,7%</b><span>Akurasi model</span></div>
+      <div class="stat"><b>95,7%</b><span>Skor ROC-AUC</span></div>
+      <div class="stat"><b>297</b><span>Data pasien latih</span></div>
+      <div class="stat"><b>13</b><span>Indikator klinis</span></div>
+    </div>
   </div>
 </div>
 
-<div class="wrap">
-
-  <div class="warn">
-    <strong>⚠️ Penting dibaca dulu</strong>
-    Hasil di halaman ini adalah <b>prediksi model Machine Learning untuk tujuan edukasi</b>,
-    <b>bukan diagnosis medis</b>. Untuk kepastian kondisi kesehatan, konsultasikan ke dokter
-    atau tenaga medis profesional.
+<section id="cara">
+  <div class="wrap">
+    <div class="notice warn"><b>Penting untuk dipahami</b>Hasil prediksi pada aplikasi ini hanya bersifat edukasi dan bukan diagnosis medis. Untuk kepastian kondisi kesehatan Anda, konsultasikan langsung dengan dokter atau tenaga medis profesional.</div>
+    <div style="height:34px"></div>
+    <div class="sec-head">
+      <div class="kicker">Panduan</div>
+      <h2>Cara Menggunakan Aplikasi</h2>
+      <p>Empat langkah sederhana untuk mendapatkan estimasi risiko. Seluruh proses berjalan di browser Anda dan tidak menyimpan data pribadi apa pun.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3>Siapkan data klinis</h3><p>Siapkan hasil pemeriksaan dasar seperti umur, tekanan darah, kolesterol, dan hasil EKG bila ada.</p></div>
+      <div class="step"><div class="num">2</div><h3>Isi formulir</h3><p>Lengkapi 13 indikator pada formulir prediksi. Setiap kolom memiliki penjelasan agar mudah diisi.</p></div>
+      <div class="step"><div class="num">3</div><h3>Klik prediksi</h3><p>Tekan tombol "Prediksi Sekarang". Model akan menghitung estimasi dalam hitungan detik.</p></div>
+      <div class="step"><div class="num">4</div><h3>Baca hasil</h3><p>Anda menerima klasifikasi risiko beserta persentase probabilitas dan saran tindak lanjut.</p></div>
+    </div>
   </div>
+</section>
 
-  <div class="card">
-    <form id="form">
-      <h2 class="sec">🧍 Data Diri</h2>
-      <div class="grid">
-        <label class="f"><span class="lbl">Umur (tahun)</span>
-          <input type="number" name="age" min="20" max="90" value="50" required></label>
-        <label class="f"><span class="lbl">Jenis kelamin</span>
-          <select name="sex"><option value="1">Laki-laki</option><option value="0">Perempuan</option></select></label>
+<section class="alt" id="data">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Transparansi</div>
+      <h2>Data yang Digunakan</h2>
+      <p>Model dilatih menggunakan <b>Heart Disease UCI (Cleveland)</b>, dataset publik berisi catatan klinis pasien. Dataset mentah berjumlah 303 baris, kemudian dibersihkan menjadi <b>297 baris</b> (6 baris bermasalah dibuang). Komposisi target cukup seimbang: 164 pasien sehat dan 139 pasien terdiagnosis penyakit jantung.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fitur</th><th>Keterangan</th><th>Contoh Nilai</th></tr></thead>
+        <tbody>
+          <tr><td>age</td><td>Umur pasien (tahun)</td><td>29 &ndash; 77</td></tr>
+          <tr><td>sex</td><td>Jenis kelamin (1 = laki-laki, 0 = perempuan)</td><td>0 / 1</td></tr>
+          <tr><td>cp</td><td>Jenis nyeri dada (1 = tipikal, 2 = atipikal, 3 = non-angina, 4 = tanpa gejala)</td><td>1 &ndash; 4</td></tr>
+          <tr><td>trestbps</td><td>Tekanan darah istirahat (mmHg)</td><td>94 &ndash; 200</td></tr>
+          <tr><td>chol</td><td>Kolesterol serum (mg/dl)</td><td>126 &ndash; 564</td></tr>
+          <tr><td>fbs</td><td>Gula darah puasa &gt; 120 mg/dl (1 = ya, 0 = tidak)</td><td>0 / 1</td></tr>
+          <tr><td>restecg</td><td>Hasil EKG istirahat (0 = normal, 1 = abnormal, 2 = hipertrofi)</td><td>0 &ndash; 2</td></tr>
+          <tr><td>thalach</td><td>Detak jantung maksimum yang tercapai</td><td>71 &ndash; 202</td></tr>
+          <tr><td>exang</td><td>Angina saat olahraga (1 = ya, 0 = tidak)</td><td>0 / 1</td></tr>
+          <tr><td>oldpeak</td><td>Depresi segmen ST akibat olahraga</td><td>0 &ndash; 6,2</td></tr>
+          <tr><td>slope</td><td>Kemiringan segmen ST (1 = menanjak, 2 = datar, 3 = menurun)</td><td>1 &ndash; 3</td></tr>
+          <tr><td>ca</td><td>Jumlah pembuluh utama terlihat (fluoroskopi)</td><td>0 &ndash; 3</td></tr>
+          <tr><td>thal</td><td>Thalassemia (3 = normal, 6 = cacat tetap, 7 = cacat reversibel)</td><td>3 / 6 / 7</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:14px;font-size:.9rem;color:var(--slate-500)">Selain 13 fitur di atas, model juga memakai 2 fitur hasil rekayasa: kelompok umur (age_group) dan rasio tekanan darah terhadap kolesterol (bp_chol_ratio).</p>
+  </div>
+</section>
+
+<section id="model">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Di Balik Layar</div>
+      <h2>Model Machine Learning</h2>
+      <p>Diuji tiga algoritma &mdash; Logistic Regression, Random Forest, dan Support Vector Machine (RBF) &mdash; dengan GridSearchCV 5-fold. Model terbaik yang dipakai aplikasi ini adalah <b>SVM (RBF)</b>, dipilih karena memiliki recall tertinggi (false negative berbahaya pada kasus medis).</p>
+    </div>
+    <div class="metrics">
+      <div class="metric"><b>86,7%</b><span>Akurasi</span></div>
+      <div class="metric"><b>91,7%</b><span>Presisi</span></div>
+      <div class="metric"><b>78,6%</b><span>Recall</span></div>
+      <div class="metric"><b>84,6%</b><span>Skor F1</span></div>
+      <div class="metric"><b>95,7%</b><span>ROC-AUC</span></div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Model</th><th>Akurasi</th><th>Presisi</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr></thead>
+        <tbody>
+          <tr><td>Logistic Regression</td><td>83,3%</td><td>84,6%</td><td>78,6%</td><td>81,5%</td><td>94,4%</td></tr>
+          <tr><td>Random Forest</td><td>81,7%</td><td>87,0%</td><td>71,4%</td><td>78,4%</td><td>94,6%</td></tr>
+          <tr><td><b>SVM (RBF) &mdash; dipakai</b></td><td><b>86,7%</b></td><td><b>91,7%</b></td><td><b>78,6%</b></td><td><b>84,6%</b></td><td><b>95,7%</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="prediksi">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Formulir</div>
+      <h2>Cek Risiko Anda</h2>
+      <p>Isi seluruh kolom dengan data klinis yang sebenarnya agar hasil estimasi akurat. Kolom bertanda pilihan cukup dipilih dari daftar yang tersedia.</p>
+    </div>
+    <div class="form-card">
+      <form id="form-prediksi" autocomplete="off">
+        <div class="fgroup">
+          <h3>Data Diri</h3>
+          <p>Informasi dasar pasien.</p>
+          <div class="grid">
+            <div class="field"><label for="age">Umur (tahun)</label><input id="age" name="age" type="number" min="1" max="120" value="55" required></div>
+            <div class="field"><label for="sex">Jenis Kelamin</label><select id="sex" name="sex"><option value="1">Laki-laki</option><option value="0">Perempuan</option></select></div>
+            <div class="field full"><label for="cp">Jenis Nyeri Dada</label><select id="cp" name="cp"><option value="1">Nyeri dada tipikal</option><option value="2">Nyeri dada atipikal</option><option value="3">Nyeri non-angina</option><option value="4" selected>Tanpa gejala (asimtomatik)</option></select><small>Sesuai kode dataset: 1 = tipikal, 2 = atipikal, 3 = non-angina, 4 = asimtomatik.</small></div>
+          </div>
+        </div>
+        <div class="fgroup">
+          <h3>Pemeriksaan Jantung</h3>
+          <p>Hasil pemeriksaan fisik dan EKG.</p>
+          <div class="grid">
+            <div class="field"><label for="trestbps">Tekanan Darah Istirahat (mmHg)</label><input id="trestbps" name="trestbps" type="number" min="80" max="250" value="130" required></div>
+            <div class="field"><label for="thalach">Detak Jantung Maksimum</label><input id="thalach" name="thalach" type="number" min="60" max="250" value="150" required><small>Detak jantung tertinggi yang tercapai saat tes.</small></div>
+            <div class="field"><label for="exang">Nyeri Dada Saat Olahraga</label><select id="exang" name="exang"><option value="0">Tidak</option><option value="1">Ya</option></select></div>
+            <div class="field"><label for="oldpeak">Depresi ST (oldpeak)</label><input id="oldpeak" name="oldpeak" type="number" min="0" max="10" step="0.1" value="1.0" required><small>Penurunan segmen ST pada EKG, contoh: 1.4</small></div>
+            <div class="field"><label for="slope">Kemiringan Segmen ST</label><select id="slope" name="slope"><option value="1">Menanjak (upsloping)</option><option value="2" selected>Datar (flat)</option><option value="3">Menurun (downsloping)</option></select></div>
+            <div class="field"><label for="restecg">Hasil EKG Istirahat</label><select id="restecg" name="restecg"><option value="0">Normal</option><option value="1">Abnormalitas ST-T</option><option value="2">Hipertrofi ventrikel kiri</option></select></div>
+          </div>
+        </div>
+        <div class="fgroup">
+          <h3>Hasil Laboratorium</h3>
+          <p>Hasil tes darah dan pencitraan.</p>
+          <div class="grid">
+            <div class="field"><label for="chol">Kolesterol (mg/dl)</label><input id="chol" name="chol" type="number" min="100" max="600" value="250" required></div>
+            <div class="field"><label for="fbs">Gula Darah Puasa &gt; 120 mg/dl</label><select id="fbs" name="fbs"><option value="0">Tidak</option><option value="1">Ya</option></select></div>
+            <div class="field"><label for="ca">Pembuluh Utama Terlihat (0&ndash;3)</label><select id="ca" name="ca"><option>0</option><option>1</option><option>2</option><option>3</option></select><small>Jumlah pembuluh darah utama dari fluoroskopi.</small></div>
+            <div class="field"><label for="thal">Thalassemia</label><select id="thal" name="thal"><option value="3">Normal</option><option value="6">Cacat tetap (fixed defect)</option><option value="7">Cacat reversibel</option></select></div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit" id="btn-submit">Prediksi Sekarang</button>
+          <span class="hint">Hasil muncul di bawah dalam beberapa detik.</span>
+        </div>
+        <div class="err" id="err"></div>
+      </form>
+      <div id="hasil">
+        <h3 id="hasil-label"></h3>
+        <div class="prob-row">
+          <div class="prob-track"><div class="prob-fill" id="prob-fill"></div></div>
+          <div class="prob-num" id="prob-num"></div>
+        </div>
+        <p class="interp" id="hasil-interp"></p>
       </div>
+    </div>
+  </div>
+</section>
 
-      <h2 class="sec">💓 Nyeri Dada & Jantung</h2>
-      <div class="grid">
-        <label class="f"><span class="lbl">Jenis nyeri dada</span>
-          <select name="cp">
-            <option value="1">Typical angina</option>
-            <option value="2">Atypical angina</option>
-            <option value="3">Non-anginal</option>
-            <option value="4">Asymptomatic</option>
-          </select></label>
-        <label class="f"><span class="lbl">Detak jantung maksimum</span>
-          <input type="number" name="thalach" min="70" max="220" value="150" required></label>
-        <label class="f"><span class="lbl">Angina saat olahraga?</span>
-          <select name="exang"><option value="0">Tidak</option><option value="1">Ya</option></select></label>
-        <label class="f"><span class="lbl">ST depression (oldpeak)</span>
-          <input type="number" name="oldpeak" min="0" max="7" step="0.1" value="1.0" required></label>
-        <label class="f"><span class="lbl">Kemiringan segmen ST</span>
-          <select name="slope">
-            <option value="1">Upsloping</option><option value="2">Flat</option><option value="3">Downsloping</option>
-          </select></label>
+<section id="kreator">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Tentang</div>
+      <h2>Kreator</h2>
+    </div>
+    <div class="creator-card">
+      <div class="avatar">AS</div>
+      <div>
+        <h3>Ahmad Dandi Subhani</h3>
+        <div class="npm">NPM 202343500126</div>
+        <p>Universitas Indraprasta PGRI &mdash; Proyek Tugas Akhir Machine Learning: prediksi penyakit jantung end-to-end (CRISP-DM), dari eksplorasi data hingga deployment web dan bot Telegram.</p>
       </div>
-
-      <h2 class="sec">🧪 Tekanan Darah & Hasil Lab</h2>
-      <div class="grid">
-        <label class="f"><span class="lbl">Tekanan darah istirahat (mm Hg)</span>
-          <input type="number" name="trestbps" min="80" max="220" value="120" required></label>
-        <label class="f"><span class="lbl">Kolesterol (mg/dl)</span>
-          <input type="number" name="chol" min="100" max="600" value="240" required></label>
-        <label class="f"><span class="lbl">Gula darah puasa &gt; 120 mg/dl?</span>
-          <select name="fbs"><option value="0">Tidak</option><option value="1">Ya</option></select></label>
-        <label class="f"><span class="lbl">Hasil EKG istirahat</span>
-          <select name="restecg">
-            <option value="0">Normal</option><option value="1">ST-T abnormal</option>
-            <option value="2">Hipertrofi ventrikel</option>
-          </select></label>
-        <label class="f"><span class="lbl">Pembuluh utama (fluoroskopi)</span>
-          <select name="ca"><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
-        <label class="f"><span class="lbl">Thalassemia</span>
-          <select name="thal">
-            <option value="3">Normal</option><option value="6">Fixed defect</option>
-            <option value="7">Reversible defect</option>
-          </select></label>
-      </div>
-
-      <button class="btn" type="submit" id="btn">🔍 Prediksi Sekarang</button>
-      <div class="err" id="err"></div>
-    </form>
+    </div>
   </div>
-
-  <div class="card" id="hasil">
-    <div class="emoji" id="h-emoji"></div>
-    <h3 id="h-label"></h3>
-    <div class="prob" id="h-prob"></div>
-    <div class="bar"><div id="h-bar"></div></div>
-    <p style="color:var(--muted);font-size:.9rem" id="h-saran"></p>
-  </div>
-
-  <div class="card">
-    <h2 class="sec">🤖 Tentang Model</h2>
-    <p style="font-size:.9rem;color:#334155">
-      Model <b>SVM kernel RBF</b> terpilih dari 3 kandidat (Logistic Regression, Random Forest, SVM)
-      lewat <b>GridSearchCV 5-fold</b>. Dipilih berdasarkan <b>recall tertinggi</b> —
-      pada kasus medis, pasien sakit yang terlewat (false negative) lebih berbahaya daripada salah alarm.
-    </p>
-    <table class="met">
-      <tr><th>Metrik (data uji)</th><th>Nilai</th></tr>
-      <tr><td>Akurasi</td><td><b>86,7%</b></td></tr>
-      <tr><td>Precision</td><td><b>91,7%</b></td></tr>
-      <tr><td>Recall</td><td><b>78,6%</b></td></tr>
-      <tr><td>F1</td><td><b>84,6%</b></td></tr>
-      <tr><td>ROC-AUC</td><td><b>95,7%</b></td></tr>
-    </table>
-    <p class="hint" style="margin-top:.6rem">Dataset: Heart Disease UCI Cleveland (297 baris). Detail lengkap di Bab 14 repo praktikumML.</p>
-  </div>
-
-</div>
+</section>
 
 <footer>
-  Dibuat oleh <b>Ahmad Dandi Subhani</b> (202343500126) · Universitas Indraprasta PGRI<br>
-  <a href="https://github.com/dandienter/heart-disease-predictor">GitHub repo</a> ·
-  <a href="https://github.com/dandienter/praktikumML">praktikumML</a>
+  <div class="wrap">
+    <div><b>KardioCek</b> &mdash; Prediksi Risiko Penyakit Jantung.<br>Hasil bersifat edukasi, bukan diagnosis medis.</div>
+    <div>Dikembangkan oleh <b>Ahmad Dandi Subhani</b> (202343500126)<br>Universitas Indraprasta PGRI &mdash; 2026</div>
+  </div>
 </footer>
 
 <script>
-const form = document.getElementById('form');
-const btn = document.getElementById('btn');
-const err = document.getElementById('err');
+const form = document.getElementById('form-prediksi');
 const hasil = document.getElementById('hasil');
+const errBox = document.getElementById('err');
+const btn = document.getElementById('btn-submit');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  err.style.display = 'none';
-  btn.disabled = true; btn.textContent = '⏳ Memprediksi...';
-  const data = Object.fromEntries(new FormData(form).entries());
+  errBox.style.display = 'none';
+  const data = {};
+  for (const el of form.elements) {
+    if (el.name) data[el.name] = parseFloat(el.value);
+  }
+  btn.disabled = true;
+  btn.textContent = 'Menghitung...';
   try {
     const r = await fetch('/api/predict', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data)
     });
+    if (!r.ok) throw new Error('Server menolak input. Periksa kembali isian formulir.');
     const j = await r.json();
-    if (!r.ok) throw new Error(j.error || 'Gagal memprediksi');
     const tinggi = j.prediksi === 1;
-    hasil.className = 'card show ' + (tinggi ? 'tinggi' : 'rendah');
-    document.getElementById('h-emoji').textContent = tinggi ? '🔴' : '🟢';
-    document.getElementById('h-label').textContent =
-      tinggi ? 'Risiko TINGGI penyakit jantung' : 'Risiko RENDAH penyakit jantung';
-    const pct = (j.probabilitas * 100).toFixed(1) + '%';
-    document.getElementById('h-prob').textContent = pct;
-    document.getElementById('h-bar').style.width = '0%';
-    requestAnimationFrame(() => setTimeout(() =>
-      document.getElementById('h-bar').style.width = pct, 50));
-    document.getElementById('h-saran').textContent = tinggi
-      ? 'Disarankan konsultasi ke dokter untuk pemeriksaan lanjutan.'
-      : 'Tetap jaga pola hidup sehat dan cek kesehatan berkala ya! 💪';
-    hasil.scrollIntoView({behavior: 'smooth', block: 'center'});
-  } catch (ex) {
-    err.textContent = '⚠️ ' + ex.message;
-    err.style.display = 'block';
+    const pct = (j.probabilitas * 100);
+    hasil.className = 'show ' + (tinggi ? 'tinggi' : 'rendah');
+    document.getElementById('hasil-label').textContent =
+      tinggi ? 'Hasil: Risiko Tinggi' : 'Hasil: Risiko Rendah';
+    document.getElementById('prob-num').textContent = pct.toFixed(1) + '%';
+    document.getElementById('prob-fill').style.width = '0%';
+    document.getElementById('hasil-interp').textContent = tinggi
+      ? 'Model memperkirakan probabilitas penyakit jantung sebesar ' + pct.toFixed(1) + '%. Disarankan segera berkonsultasi dengan dokter untuk pemeriksaan lanjutan.'
+      : 'Model memperkirakan probabilitas penyakit jantung sebesar ' + pct.toFixed(1) + '%. Tetap jaga pola hidup sehat dan lakukan pemeriksaan rutin.';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.getElementById('prob-fill').style.width = pct + '%';
+    }));
+    hasil.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  } catch (err) {
+    errBox.textContent = err.message || 'Terjadi kesalahan. Coba lagi.';
+    errBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Prediksi Sekarang';
   }
-  btn.disabled = false; btn.textContent = '🔍 Prediksi Sekarang';
 });
 </script>
 </body>
