@@ -119,7 +119,9 @@ tbody tr:nth-child(even){background:#f8fafc}
 .creator-card .meta a{color:var(--teal-700);font-weight:600}
 /* footer */
 footer{background:var(--teal-900);color:#cbd5e1;padding:32px 0;font-size:.88rem}
-footer .wrap{display:flex;flex-direction:column;gap:16px}
+footer .wrap{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+footer a{color:#fff;font-weight:600}
+footer .copy{font-size:.82rem;color:#94a3b8}
 footer b{color:#fff}
 /* ============ DESKTOP (min-width: 860px) ============ */
 @media(min-width:860px){
@@ -155,7 +157,7 @@ footer b{color:#fff}
   .creator-photo{width:132px;height:132px}
   .creator-btns{max-width:420px}
   .tg-strip{flex-direction:row;align-items:center;justify-content:space-between;padding:26px 30px}
-  footer .wrap{flex-direction:row;justify-content:space-between;align-items:flex-start}
+  footer .wrap{align-items:center;text-align:center}
 }
 </style>
 </head>
@@ -360,8 +362,8 @@ footer b{color:#fff}
 
 <footer>
   <div class="wrap">
-    <div><b>HDPredictor</b> - Prediksi Risiko Penyakit Jantung.<br>Hasil bersifat edukasi, bukan diagnosis medis.</div>
-    <div>Dikembangkan oleh <b>Ahmad Dandi Subhani</b> (202343500126)<br>Universitas Indraprasta PGRI - 2026<br><a href="https://github.com/dandienter/heart-disease-predictor" target="_blank" rel="noopener" style="color:#fff">Repository GitHub</a> &middot; <a href="https://t.me/hdpredictor_bot" target="_blank" rel="noopener" style="color:#fff">@hdpredictor_bot</a></div>
+    <div>Made with love by <a href="https://instagram.com/dandisubhani_" target="_blank" rel="noopener">@dandisubhani_</a></div>
+    <div class="copy">&copy; 2026 HDPredictor. All rights reserved.</div>
   </div>
 </footer>
 
